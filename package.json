@@ -1,0 +1,21 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "RS School Node.js 2023Q2 course 2nd task",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Disembow/file-manager.git"
+  },
+  "keywords": [],
+  "author": "Yauhen Naliotau @Disembow",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Disembow/file-manager/issues"
+  },
+  "homepage": "https://github.com/Disembow/file-manager#readme"
+}
