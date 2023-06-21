@@ -1,0 +1,16 @@
+export const commands = {
+  help: 'Show list of available commands',
+  up: 'Go upper from current directory',
+  cd: 'Go to dedicated folder from current directory: up <path_to_directory>',
+  ls: 'Print in console list of all files and folders in current directory',
+  cat: "Read file and print it's content in console",
+  add: 'Create empty file in current working directory: add <new_file_name>',
+  rn: 'Rename file: rn <path_to_file> <new_filename>',
+  cp: 'Copy file: cp <path_to_file> <path_to_new_directory>',
+  mv: 'Move file: mv <path_to_file> <path_to_new_directory>',
+  rm: 'Delete file: rm <path_to_file>',
+  os: 'Operating system info:\nos --flag:\n--EOL - get system End-Of-Line\n--cpus - Get host machine CPUs info\n--homedir - Get current system user name\n--architecture - Get CPU architecture for which Node.js binary has compiled',
+  hash: 'Calculate hash for file',
+  compress: 'Compress file (using Brotli algorithm)',
+  decompress: 'Decompress file (using Brotli algorithm)',
+};
