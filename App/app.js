@@ -22,6 +22,34 @@ class App extends Utils {
           this.up();
           await this.askCommand();
           break;
+        case 'ls':
+          this.ls();
+          await this.askCommand();
+          break;
+        case 'cat':
+          this.cat();
+          await this.askCommand();
+          break;
+        case 'os --EOL':
+          this.os_eol();
+          await this.askCommand();
+          break;
+        case 'os --cpus':
+          this.os_cpus();
+          await this.askCommand();
+          break;
+        case 'os --homedir':
+          this.os_homedir();
+          await this.askCommand();
+          break;
+        case 'os --username':
+          this.os_username();
+          await this.askCommand();
+          break;
+        case 'os --architecture':
+          this.os_architecture();
+          await this.askCommand();
+          break;
         case '.exit':
           this.farewellMsg();
           break;
