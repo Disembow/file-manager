@@ -1,5 +1,6 @@
+import { homedir } from 'os';
 import { stdin, stdout } from 'process';
-import { pipeline } from 'stream/promises';
+import readline from 'readline/promises';
 
 import { getUserName } from '../utils/getUserName.js';
 import { sendMessage } from '../utils/sendMessage.js';
@@ -9,22 +10,44 @@ import { commands } from '../commands/commands.js';
 class App {
   constructor() {
     this.userName = getUserName();
-    this.startDir = process.cwd();
+    this.startDir = homedir();
     this.currentDir = '';
+    this.isWelcomeMsg = true;
+    this.rl = readline.createInterface({
+      input: stdin,
+      output: stdout,
+    });
   }
 
-  changeCurrentDir(path) {
+  changeCurrentDir = (path) => {
     this.currentDir = path;
+  };
+
+  welcomeMsg() {
+    this.rl.write(`Welcome to the File Manager, ${this.userName}!\n`);
+    this.rl.write(`You are currently in ${this.startDir}\n`);
+    this.isWelcomeMsg = !this.isWelcomeMsg;
   }
 
-  init() {
-    console.clear();
-    sendMessage(`Welcome to the File Manager, ${this.userName}!`);
-    sendMessage(`You are currently in ${this.startDir}`);
-    showHelp(commands);
+  askCommand = async () => {
+    if (this.isWelcomeMsg) {
+      this.welcomeMsg();
+      await this.askCommand();
+    } else {
+      const command = await this.rl.question('');
 
-    pipeline(stdin, stdout);
-  }
+      if (command === '.exit') {
+        this.rl.write(`Thank you for using File Manager, ${this.userName}, goodbye!\n`);
+        this.rl.close();
+      } else {
+        await this.askCommand();
+      }
+    }
+  };
+
+  init = () => {
+    this.askCommand();
+  };
 }
 
 export default new App();
