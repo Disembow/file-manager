@@ -103,11 +103,11 @@ export class Utils {
     });
   };
 
-  os_homedir = async () => {};
+  os_homedir = async () => this.rl.write(`Homedir: ${this.startDir}${EOL}`);
 
-  os_username = async () => {};
+  os_username = async () => this.rl.write(`Username: ${os.userInfo().username}${EOL}`);
 
-  os_architecture = async () => {};
+  os_architecture = async () => this.rl.write(`${os.arch()}${EOL}`);
 
   getUserName = () => {
     return argv.find((e) => e.includes(this.userNameArg)).split('=')[1];
