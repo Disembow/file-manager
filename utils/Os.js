@@ -1,7 +1,7 @@
 import os, { EOL } from 'os';
 import { Initial } from './Initial.js';
 
-export class OperatingSystemClass extends Initial {
+export class OperatingSystem extends Initial {
   constructor() {
     super();
   }

@@ -11,9 +11,10 @@ class App extends Utils {
       this.welcomeMsg();
       await this.askCommand();
     } else {
-      const command = (await this.rl.question('')).split(' ')[0];
+      const fullCommand = await this.rl.question('');
+      const mainCommand = fullCommand.split(' ')[0];
 
-      switch (command) {
+      switch (mainCommand) {
         case '--help':
           this.showCommandsList(commands);
           await this.askCommand();
@@ -23,7 +24,7 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'cd':
-          this.cd(command);
+          this.cd(fullCommand);
           await this.askCommand();
           break;
         case 'ls':
@@ -54,24 +55,8 @@ class App extends Utils {
           this.rm();
           await this.askCommand();
           break;
-        case 'os --EOL':
-          this.os_eol();
-          await this.askCommand();
-          break;
-        case 'os --cpus':
-          this.os_cpus();
-          await this.askCommand();
-          break;
-        case 'os --homedir':
-          this.os_homedir();
-          await this.askCommand();
-          break;
-        case 'os --username':
-          this.os_username();
-          await this.askCommand();
-          break;
-        case 'os --architecture':
-          this.os_architecture();
+        case 'os':
+          await this.os(fullCommand);
           await this.askCommand();
           break;
         case '.exit':
@@ -85,8 +70,41 @@ class App extends Utils {
     }
   };
 
-  init = () => {
-    this.askCommand();
+  cd = (command) => {
+    this.rl.write('CD', command);
+  };
+
+  os = async (command) => {
+    switch (command) {
+      case 'os --EOL':
+        this.os_eol();
+        await this.askCommand();
+        break;
+      case 'os --cpus':
+        this.os_cpus();
+        await this.askCommand();
+        break;
+      case 'os --homedir':
+        this.os_homedir();
+        await this.askCommand();
+        break;
+      case 'os --username':
+        this.os_username();
+        await this.askCommand();
+        break;
+      case 'os --architecture':
+        this.os_architecture();
+        await this.askCommand();
+        break;
+      default:
+        this.rl.write(this.errorMessage);
+        await this.askCommand();
+        break;
+    }
+  };
+
+  init = async () => {
+    await this.askCommand();
   };
 }
 

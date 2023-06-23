@@ -1,9 +1,9 @@
 import { readdir } from 'fs/promises';
 import { EOL } from 'os';
 import { sep } from 'path';
-import { OperatingSystemClass } from './Os.js';
+import { OperatingSystem } from './Os.js';
 
-export class Utils extends OperatingSystemClass {
+export class Utils extends OperatingSystem {
   constructor() {
     super();
   }
@@ -20,10 +20,6 @@ export class Utils extends OperatingSystemClass {
       this.currentDir = array.join(sep);
       this.rl.write(`${this.currentDir}${sep}${EOL}`);
     }
-  };
-
-  cd = (command) => {
-    this.rl.write(`${command} ++++`);
   };
 
   ls = async () => {
