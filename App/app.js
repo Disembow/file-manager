@@ -11,7 +11,7 @@ class App extends Utils {
       this.welcomeMsg();
       await this.askCommand();
     } else {
-      const command = await this.rl.question('');
+      const command = (await this.rl.question('')).split(' ')[0];
 
       switch (command) {
         case '--help':
@@ -22,12 +22,36 @@ class App extends Utils {
           this.up();
           await this.askCommand();
           break;
+        case 'cd':
+          this.cd(command);
+          await this.askCommand();
+          break;
         case 'ls':
           this.ls();
           await this.askCommand();
           break;
         case 'cat':
           this.cat();
+          await this.askCommand();
+          break;
+        case 'add':
+          this.add();
+          await this.askCommand();
+          break;
+        case 'rn':
+          this.rn();
+          await this.askCommand();
+          break;
+        case 'cp':
+          this.cp();
+          await this.askCommand();
+          break;
+        case 'mv':
+          this.mv();
+          await this.askCommand();
+          break;
+        case 'rm':
+          this.rm();
           await this.askCommand();
           break;
         case 'os --EOL':
@@ -54,6 +78,7 @@ class App extends Utils {
           this.farewellMsg();
           break;
         default:
+          this.rl.write(this.errorMessage);
           await this.askCommand();
           break;
       }
