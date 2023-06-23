@@ -1,8 +1,5 @@
 import { commands } from '../commands/commands.js';
 import { Utils } from '../utils/Utils.js';
-import { EOL } from 'os';
-import path from 'path';
-import { access } from 'fs/promises';
 
 class App extends Utils {
   constructor() {
@@ -70,56 +67,6 @@ class App extends Utils {
           await this.askCommand();
           break;
       }
-    }
-  };
-
-  cd = async (command) => {
-    if (command === 'cd') {
-      return this.rl.write(`Command must include path: cd <path_to_file>${EOL}`);
-    }
-
-    const [_, newPath] = command.replace(/ +/g, ' ').trim().split(' ');
-
-    try {
-      let targetDir;
-      this.currentDir ? (targetDir = this.currentDir) : (targetDir = this.startDir);
-      targetDir = path.resolve(targetDir, newPath);
-
-      await access(targetDir);
-
-      this.currentDir = targetDir;
-      this.rl.write(`You're currently in ${this.currentDir}${EOL}`);
-    } catch (error) {
-      this.rl.write(`Specified path does not exist${EOL}`);
-    }
-  };
-
-  os = async (command) => {
-    switch (command) {
-      case 'os --EOL':
-        this.os_eol();
-        await this.askCommand();
-        break;
-      case 'os --cpus':
-        this.os_cpus();
-        await this.askCommand();
-        break;
-      case 'os --homedir':
-        this.os_homedir();
-        await this.askCommand();
-        break;
-      case 'os --username':
-        this.os_username();
-        await this.askCommand();
-        break;
-      case 'os --architecture':
-        this.os_architecture();
-        await this.askCommand();
-        break;
-      default:
-        this.rl.write(this.errorMessage);
-        await this.askCommand();
-        break;
     }
   };
 

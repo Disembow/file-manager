@@ -1,7 +1,8 @@
-import { readdir } from 'fs/promises';
+import { access, readdir } from 'fs/promises';
 import { EOL } from 'os';
 import { sep } from 'path';
 import { OperatingSystem } from './Os.js';
+import path from 'path';
 
 export class Utils extends OperatingSystem {
   constructor() {
@@ -19,6 +20,27 @@ export class Utils extends OperatingSystem {
       array.pop();
       this.currentDir = array.join(sep);
       this.rl.write(`${this.currentDir}${sep}${EOL}`);
+    }
+  };
+
+  cd = async (command) => {
+    if (command === 'cd') {
+      return this.rl.write(`Command must include path: cd <path_to_file>${EOL}`);
+    }
+
+    const [_, newPath] = command.replace(/ +/g, ' ').trim().split(' ');
+
+    try {
+      let targetDir;
+      this.currentDir ? (targetDir = this.currentDir) : (targetDir = this.startDir);
+      targetDir = path.resolve(targetDir, newPath);
+
+      await access(targetDir);
+
+      this.currentDir = targetDir;
+      this.rl.write(`You're currently in ${this.currentDir}${EOL}`);
+    } catch (error) {
+      this.rl.write(`Specified path does not exist${EOL}`);
     }
   };
 
@@ -58,4 +80,27 @@ export class Utils extends OperatingSystem {
   mv = async () => {};
 
   rm = async () => {};
+
+  os = async (command) => {
+    switch (command) {
+      case 'os --EOL':
+        this.os_eol();
+        break;
+      case 'os --cpus':
+        this.os_cpus();
+        break;
+      case 'os --homedir':
+        this.os_homedir();
+        break;
+      case 'os --username':
+        this.os_username();
+        break;
+      case 'os --architecture':
+        this.os_architecture();
+        break;
+      default:
+        this.rl.write(this.errorMessage);
+        break;
+    }
+  };
 }
