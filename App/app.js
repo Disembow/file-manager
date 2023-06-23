@@ -14,9 +14,8 @@ class App extends Utils {
       await this.askCommand();
     } else {
       const fullCommand = await this.rl.question('');
-      const mainCommand = fullCommand.split(' ')[0];
-      const pathCommand = fullCommand.split(' ')[1];
-      const secondPathCommand = fullCommand.split(' ')[2];
+      const trimmedCommand = fullCommand.replace(/ +/g, ' ').trim();
+      const [mainCommand, pathCommand, secondPathCommand] = trimmedCommand.split(' ');
 
       switch (mainCommand) {
         case '--help':
@@ -28,11 +27,11 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'cd':
-          await this.cd(fullCommand);
+          await this.cd(trimmedCommand);
           await this.askCommand();
           break;
         case 'ls':
-          this.ls();
+          await this.ls();
           await this.askCommand();
           break;
         case 'cat':
@@ -44,23 +43,23 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'rn':
-          this.rn();
+          await this.rn(pathCommand, secondPathCommand);
           await this.askCommand();
           break;
         case 'cp':
-          this.cp();
+          await this.cp();
           await this.askCommand();
           break;
         case 'mv':
-          this.mv();
+          await this.mv();
           await this.askCommand();
           break;
         case 'rm':
-          this.rm();
+          await this.rm();
           await this.askCommand();
           break;
         case 'os':
-          await this.os(fullCommand);
+          await this.os(trimmedCommand);
           await this.askCommand();
           break;
         case '.exit':

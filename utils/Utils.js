@@ -29,7 +29,7 @@ export class Utils extends OperatingSystem {
       return this.rl.write(`Command must include path: cd <path_to_file>${EOL}`);
     }
 
-    const [_, newPath] = command.replace(/ +/g, ' ').trim().split(' ');
+    const [_, newPath] = command.split(' ');
 
     try {
       let targetDir;
@@ -76,9 +76,10 @@ export class Utils extends OperatingSystem {
       const pathToFile = path.resolve(currPath, pathCommand);
       const rs = createReadStream(pathToFile, { encoding: 'utf8' });
 
-      rs.on('data', (chunk) => this.rl.write(chunk));
-      rs.on('error', () => this.rl.write(`Couldn't find such file as ${path}${EOL}`));
-      rs.on('close', () => console.log());
+      rs.on('open', () => console.log());
+      rs.on('data', (chunk) => console.log(chunk));
+      rs.on('error', () => console.log(`Couldn't find such file as ${path}`));
+      rs.on('close', () => console.log(`Reading of ${pathCommand} finished${EOL}`));
     } catch (error) {
       this.rl.write(`Couldn't find such file as ${path}${EOL}`);
     }
