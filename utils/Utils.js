@@ -1,5 +1,5 @@
-import { createReadStream, watchFile } from 'fs';
-import { access, readdir, writeFile } from 'fs/promises';
+import { createReadStream } from 'fs';
+import { access, readdir, writeFile, rename } from 'fs/promises';
 import { EOL } from 'os';
 import path, { sep } from 'path';
 
@@ -97,7 +97,23 @@ export class Utils extends OperatingSystem {
     }
   };
 
-  rn = async () => {};
+  rn = async (originalFileName, newFileName) => {
+    if (!originalFileName || !newFileName) {
+      return console.log('Wrong command, it needs 2 arguments');
+    }
+
+    const currPath = this.currentDir ? this.currentDir : this.startDir;
+    const pathToFile = path.resolve(currPath, originalFileName);
+    const pathToRenamedFile = path.resolve(currPath, newFileName);
+
+    try {
+      await access(pathToFile);
+      await rename(pathToFile, pathToRenamedFile);
+      console.log(`${originalFileName} renamed into ${newFileName}`);
+    } catch (error) {
+      console.log(`Couldn't find such file as ${originalFileName}`);
+    }
+  };
 
   cp = async () => {};
 
