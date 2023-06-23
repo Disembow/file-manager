@@ -1,5 +1,8 @@
 import { commands } from '../commands/commands.js';
 import { Utils } from '../utils/Utils.js';
+import { EOL } from 'os';
+import path from 'path';
+import { access } from 'fs/promises';
 
 class App extends Utils {
   constructor() {
@@ -24,7 +27,7 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'cd':
-          this.cd(fullCommand);
+          await this.cd(fullCommand);
           await this.askCommand();
           break;
         case 'ls':
@@ -70,8 +73,25 @@ class App extends Utils {
     }
   };
 
-  cd = (command) => {
-    this.rl.write('CD', command);
+  cd = async (command) => {
+    if (command === 'cd') {
+      return this.rl.write(`Command must include path: cd <path_to_file>${EOL}`);
+    }
+
+    const [_, newPath] = command.replace(/ +/g, ' ').trim().split(' ');
+
+    try {
+      let targetDir;
+      this.currentDir ? (targetDir = this.currentDir) : (targetDir = this.startDir);
+      targetDir = path.resolve(targetDir, newPath);
+
+      await access(targetDir);
+
+      this.currentDir = targetDir;
+      this.rl.write(`You're currently in ${this.currentDir}${EOL}`);
+    } catch (error) {
+      this.rl.write(`Specified path does not exist${EOL}`);
+    }
   };
 
   os = async (command) => {
