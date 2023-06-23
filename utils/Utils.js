@@ -1,8 +1,9 @@
+import { createReadStream } from 'fs';
 import { access, readdir } from 'fs/promises';
 import { EOL } from 'os';
-import { sep } from 'path';
+import path, { sep } from 'path';
+
 import { OperatingSystem } from './Os.js';
-import path from 'path';
 
 export class Utils extends OperatingSystem {
   constructor() {
@@ -69,7 +70,19 @@ export class Utils extends OperatingSystem {
     }
   };
 
-  cat = async () => {};
+  cat = async (pathCommand) => {
+    try {
+      const currPath = this.currentDir ? this.currentDir : this.startDir;
+      const pathToFile = path.resolve(currPath, pathCommand);
+      const rs = createReadStream(pathToFile, { encoding: 'utf8' });
+
+      rs.on('data', (chunk) => this.rl.write(chunk));
+      rs.on('error', () => this.rl.write(`Couldn't find such file as ${path}${EOL}`));
+      rs.on('close', () => console.log());
+    } catch (error) {
+      this.rl.write(`Couldn't find such file as ${path}${EOL}`);
+    }
+  };
 
   add = async () => {};
 

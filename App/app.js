@@ -1,3 +1,5 @@
+import { EOL } from 'os';
+
 import { commands } from '../commands/commands.js';
 import { Utils } from '../utils/Utils.js';
 
@@ -13,6 +15,8 @@ class App extends Utils {
     } else {
       const fullCommand = await this.rl.question('');
       const mainCommand = fullCommand.split(' ')[0];
+      const pathCommand = fullCommand.split(' ')[1];
+      const secondPathCommand = fullCommand.split(' ')[2];
 
       switch (mainCommand) {
         case '--help':
@@ -32,7 +36,7 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'cat':
-          this.cat();
+          await this.cat(pathCommand);
           await this.askCommand();
           break;
         case 'add':
