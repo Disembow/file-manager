@@ -1,5 +1,5 @@
-import { createReadStream } from 'fs';
-import { access, readdir } from 'fs/promises';
+import { createReadStream, watchFile } from 'fs';
+import { access, readdir, writeFile } from 'fs/promises';
 import { EOL } from 'os';
 import path, { sep } from 'path';
 
@@ -84,7 +84,17 @@ export class Utils extends OperatingSystem {
     }
   };
 
-  add = async () => {};
+  add = async (fileName) => {
+    const currPath = this.currentDir ? this.currentDir : this.startDir;
+    const pathToFile = path.resolve(currPath, fileName);
+
+    try {
+      await writeFile(pathToFile, '');
+      this.rl.write(`${fileName} has been created${EOL}`);
+    } catch (error) {
+      this.rl.write(`Error has been occured while creating file ${fileName}${EOL}`);
+    }
+  };
 
   rn = async () => {};
 

@@ -40,7 +40,7 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'add':
-          this.add();
+          await this.add(pathCommand);
           await this.askCommand();
           break;
         case 'rn':
