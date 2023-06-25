@@ -1,5 +1,5 @@
 import { createReadStream } from 'fs';
-import { access, readdir, writeFile, rename } from 'fs/promises';
+import { access, readdir, writeFile, rename, unlink } from 'fs/promises';
 import { EOL } from 'os';
 import path, { sep } from 'path';
 
@@ -119,7 +119,16 @@ export class Utils extends OperatingSystem {
 
   mv = async () => {};
 
-  rm = async () => {};
+  rm = async (enteredPath) => {
+    try {
+      const currPath = this.currentDir ? this.currentDir : this.startDir;
+      const resolevedPath = path.resolve(currPath, enteredPath);
+      await unlink(resolevedPath);
+      console.log(`${resolevedPath} removed`);
+    } catch {
+      console.log(`Can't find such file in ${resolevedPath}`);
+    }
+  };
 
   os = async (command) => {
     switch (command) {

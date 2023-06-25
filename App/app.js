@@ -55,7 +55,7 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'rm':
-          await this.rm();
+          await this.rm(pathCommand);
           await this.askCommand();
           break;
         case 'os':
