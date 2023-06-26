@@ -15,7 +15,7 @@ export class AskCommand extends Utils {
 
       const fullCommand = await this.rl.question('> ');
 
-      const trimmedCommand = fullCommand.replace(/ +/g, ' ').trim();
+      const trimmedCommand = fullCommand.replace('> ', '').replace(/ +/g, ' ').trim();
       const [mainCommand, pathCommand, secondPathCommand] = trimmedCommand.split(' ');
 
       switch (mainCommand) {
