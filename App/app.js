@@ -60,6 +60,18 @@ class App extends Utils {
           await this.os(trimmedCommand);
           await this.askCommand();
           break;
+        case 'hash':
+          await this.hash(pathCommand);
+          await this.askCommand();
+          break;
+        case 'compress':
+          await this.compress(pathCommand);
+          await this.askCommand();
+          break;
+        case 'decompress':
+          await this.decompress(pathCommand);
+          await this.askCommand();
+          break;
         case '.exit':
           this.farewellMsg();
           break;

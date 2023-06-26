@@ -1,7 +1,8 @@
 import { createReadStream, createWriteStream } from 'fs';
-import { access, readdir, writeFile, rename, unlink } from 'fs/promises';
-import { EOL } from 'os';
+import { access, readdir, readFile, writeFile, rename, unlink } from 'fs/promises';
 import path, { sep } from 'path';
+import { EOL } from 'os';
+const { createHash } = await import('node:crypto');
 
 import { OperatingSystem } from './Os.js';
 import { pipeline } from 'stream/promises';
@@ -191,5 +192,20 @@ export class Utils extends OperatingSystem {
         this.rl.write(this.errorMessage);
         break;
     }
+  };
+
+  hash = async (pathTo) => {
+    const hash = createHash('sha256');
+    const pathToFile = path.resolve(this.currentDir ? this.currentDir : this.startDir, pathTo);
+
+    try {
+      const result = await readFile(pathToFile, 'utf-8');
+      hash.update(result);
+      console.log(hash.digest('hex'));
+    } catch {
+      console.log('Wrong file path or file does not exist');
+    }
+
+    hash.end();
   };
 }
