@@ -1,52 +1,17 @@
 import { createReadStream, createWriteStream } from 'node:fs';
-import { access, readdir, readFile, writeFile, rename, unlink } from 'node:fs/promises';
+import { access, readdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
+import { pipeline } from 'node:stream/promises';
 import path, { sep } from 'node:path';
 import { EOL } from 'node:os';
 const { createHash } = await import('node:crypto');
 import zlib from 'node:zlib';
 
-import { OperatingSystem } from './Os.js';
-import { pipeline } from 'stream/promises';
+import { Navigation } from './Navigation.js';
 
-export class Utils extends OperatingSystem {
+export class Utils extends Navigation {
   constructor() {
     super();
   }
-
-  up = () => {
-    let array;
-
-    !this.currentDir ? (array = this.startDir.split(sep)) : (array = this.currentDir.split(sep));
-
-    if (array.length === 1) {
-      this.rl.write(`${this.currentDir}${sep}${EOL}`);
-    } else {
-      array.pop();
-      this.currentDir = array.join(sep);
-      this.rl.write(`${this.currentDir}${sep}${EOL}`);
-    }
-  };
-
-  cd = async (command) => {
-    if (command === 'cd') {
-      return this.rl.write(`Command must include path: cd <path_to_file>${EOL}`);
-    }
-
-    const [_, newPath] = command.split(' ');
-
-    try {
-      let targetDir;
-      this.currentDir ? (targetDir = this.currentDir) : (targetDir = this.startDir);
-      targetDir = path.resolve(targetDir, newPath);
-
-      await access(targetDir);
-
-      this.currentDir = targetDir;
-      this.rl.write(`You're currently in ${this.currentDir}${EOL}`);
-    } catch (error) {
-      this.rl.write(`Specified path does not exist${EOL}`);
-    }
-  };
 
   ls = async () => {
     try {

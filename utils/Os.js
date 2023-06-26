@@ -1,4 +1,5 @@
-import os, { EOL } from 'os';
+import os, { EOL } from 'node:os';
+
 import { Initial } from './Initial.js';
 
 export class OperatingSystem extends Initial {

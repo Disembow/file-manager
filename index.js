@@ -1,3 +1,3 @@
-import App from './App/app.js';
+import App from './app/app.js';
 
 App.init();

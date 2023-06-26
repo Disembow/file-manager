@@ -1,6 +1,6 @@
-import { argv, stdin, stdout } from 'process';
-import readline from 'readline/promises';
-import os, { homedir, EOL } from 'os';
+import { argv, stdin, stdout } from 'node:process';
+import { EOL, homedir } from 'node:os';
+import readline from 'node:readline/promises';
 
 export class Initial {
   constructor() {
@@ -15,6 +15,7 @@ export class Initial {
       input: stdin,
       output: stdout,
     });
+    this.rl.on('SIGINT', this.farewellMsg);
   }
 
   getUserName = () => {
@@ -22,7 +23,7 @@ export class Initial {
   };
 
   showCommandsList = (commands) => {
-    Object.entries(commands).map(([key, value]) => this.rl.write(`${key}: ${value}${os.EOL}`));
+    Object.entries(commands).map(([key, value]) => this.rl.write(`${key}: ${value}${EOL}`));
   };
 
   welcomeMsg = () => {
