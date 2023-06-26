@@ -28,7 +28,6 @@ export class Initial {
 
   welcomeMsg = () => {
     this.rl.write(`Welcome to the File Manager, ${this.userName}!${EOL}`);
-    // this.rl.write(`You are currently in ${this.startDir}${EOL}`);
     this.isWelcomeMsg = !this.isWelcomeMsg;
   };
 
@@ -40,4 +39,7 @@ export class Initial {
   currentDirMsg = () => {
     this.rl.write(`You are currently in ${this.currentDir}${EOL}`);
   };
+
+  checkArgs = (num = 2) =>
+    console.log(`Wrong command, it needs ${num} argument${num > 1 ? 's' : ''}`);
 }

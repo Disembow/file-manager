@@ -37,15 +37,17 @@ export class Utils extends Navigation {
     }
   };
 
-  cat = async (pathCommand) => {
+  cat = async (pathTo) => {
+    if (!pathTo) return this.checkArgs(1);
+
     try {
-      const pathToFile = path.resolve(this.currentDir, pathCommand);
+      const pathToFile = path.resolve(this.currentDir, pathTo);
       const rs = createReadStream(pathToFile, { encoding: 'utf8' });
 
       rs.on('data', (chunk) => console.log(chunk));
       rs.on('error', () => console.log(`Couldn't find such file as ${path}`));
       rs.on('close', () => {
-        console.log(`Reading of ${pathCommand} finished`);
+        console.log(`Reading of ${pathTo} finished`);
         console.log(`You are currently in ${this.currentDir}`);
       });
     } catch (error) {
@@ -54,6 +56,8 @@ export class Utils extends Navigation {
   };
 
   add = async (fileName) => {
+    if (!fileName) return this.checkArgs(1);
+
     const pathToFile = path.resolve(this.currentDir, fileName);
 
     try {
@@ -65,9 +69,7 @@ export class Utils extends Navigation {
   };
 
   rn = async (originalPath, newFileName) => {
-    if (!originalPath || !newFileName) {
-      return console.log('Wrong command, it needs 2 arguments');
-    }
+    if (!originalPath || !newFileName) return this.checkArgs();
 
     const pathToFile = path.resolve(this.currentDir, originalPath);
     const fileDir = path.dirname(pathToFile);
@@ -82,8 +84,10 @@ export class Utils extends Navigation {
   };
 
   cp = async (pathFrom, pathTo) => {
+    if (!pathFrom || !pathTo) return this.checkArgs();
+
     const pathToCopyFrom = path.resolve(this.currentDir, pathFrom);
-    const orinalFileName = pathToCopyFrom.split(sep).pop();
+    const orinalFileName = path.basename(pathToCopyFrom);
     let pathToCopyTo = path.resolve(this.currentDir, pathTo, orinalFileName);
     let fileName;
 
@@ -100,8 +104,6 @@ export class Utils extends Navigation {
 
     rs.on('error', () => {
       console.log(`File ${pathFrom} does not exist`);
-      rs.close();
-      ws.close();
       isWSOpen = false;
     });
 
@@ -110,8 +112,6 @@ export class Utils extends Navigation {
         console.log(
           `Specified path to file ${pathTo} does not exist or the operation is not permitted`
         );
-      rs.close();
-      ws.close();
     });
 
     try {
@@ -123,6 +123,8 @@ export class Utils extends Navigation {
   };
 
   mv = async (pathFrom, pathTo) => {
+    if (!pathFrom || !pathTo) return this.checkArgs();
+
     const fileName = path.resolve(pathFrom).split(sep).pop();
     const pathToNewDir = path.resolve(this.currentDir, pathTo, fileName);
 
@@ -131,6 +133,8 @@ export class Utils extends Navigation {
   };
 
   rm = async (enteredPath, mode = true) => {
+    if (!enteredPath) return this.checkArgs(1);
+
     const resolevedPath = path.resolve(this.currentDir, enteredPath);
 
     try {
@@ -165,6 +169,8 @@ export class Utils extends Navigation {
   };
 
   hash = async (pathTo) => {
+    if (!pathTo) return this.checkArgs(1);
+
     const hash = createHash('sha256');
     const pathToFile = path.resolve(this.currentDir, pathTo);
 
@@ -180,7 +186,9 @@ export class Utils extends Navigation {
   };
 
   compress = async (pathFrom, pathTo) => {
-    const fileName = path.resolve(pathFrom).split(sep).pop();
+    if (!pathFrom || !pathTo) return this.checkArgs();
+
+    const fileName = path.basename(pathFrom);
     const pathToCompressFrom = path.resolve(this.currentDir, pathFrom);
     const pathToCompressTo = path.resolve(this.currentDir, pathTo, fileName + '.br');
 
@@ -209,7 +217,9 @@ export class Utils extends Navigation {
   };
 
   decompress = async (pathFrom, pathTo) => {
-    const fileName = path.resolve(pathFrom).split(sep).pop().split('.');
+    if (!pathFrom || !pathTo) return this.checkArgs();
+
+    const fileName = path.basename(pathFrom).split('.');
     fileName.pop();
     const pathToDecompressFrom = path.resolve(this.currentDir, pathFrom);
     const pathToDecompressTo = path.resolve(this.currentDir, pathTo, fileName.join('.'));

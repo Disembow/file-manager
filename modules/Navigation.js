@@ -37,7 +37,6 @@ export class Navigation extends OperatingSystem {
       await access(targetDir);
 
       this.currentDir = targetDir;
-      // this.rl.write(`You're currently in ${this.currentDir}${EOL}`);
     } catch (error) {
       this.rl.write(`Specified path does not exist${EOL}`);
     }
