@@ -1,5 +1,5 @@
 import { createReadStream, createWriteStream } from 'node:fs';
-import { access, readdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
+import { readdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import { pipeline } from 'node:stream/promises';
 import path, { sep } from 'node:path';
 import { EOL } from 'node:os';
@@ -64,20 +64,20 @@ export class Utils extends Navigation {
     }
   };
 
-  rn = async (originalFileName, newFileName) => {
-    if (!originalFileName || !newFileName) {
+  rn = async (originalPath, newFileName) => {
+    if (!originalPath || !newFileName) {
       return console.log('Wrong command, it needs 2 arguments');
     }
 
-    const pathToFile = path.resolve(this.currentDir, originalFileName);
-    const pathToRenamedFile = path.resolve(this.currentDir, newFileName);
+    const pathToFile = path.resolve(this.currentDir, originalPath);
+    const fileDir = path.dirname(pathToFile);
+    const pathToRenamedFile = path.resolve(fileDir, newFileName);
 
     try {
-      await access(pathToFile);
       await rename(pathToFile, pathToRenamedFile);
-      console.log(`${originalFileName} renamed into ${newFileName}`);
+      console.log(`${originalPath} renamed into ${newFileName}`);
     } catch (error) {
-      console.log(`Couldn't find such file as ${originalFileName}`);
+      console.log(`Couldn't find such file as ${originalPath}`);
     }
   };
 
