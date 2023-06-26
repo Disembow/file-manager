@@ -1,8 +1,9 @@
-import { createReadStream, createWriteStream } from 'fs';
-import { access, readdir, readFile, writeFile, rename, unlink } from 'fs/promises';
-import path, { sep } from 'path';
-import { EOL } from 'os';
+import { createReadStream, createWriteStream } from 'node:fs';
+import { access, readdir, readFile, writeFile, rename, unlink } from 'node:fs/promises';
+import path, { sep } from 'node:path';
+import { EOL } from 'node:os';
 const { createHash } = await import('node:crypto');
+import zlib from 'node:zlib';
 
 import { OperatingSystem } from './Os.js';
 import { pipeline } from 'stream/promises';
@@ -161,9 +162,10 @@ export class Utils extends OperatingSystem {
   };
 
   rm = async (enteredPath, mode = true) => {
+    const currPath = this.currentDir ? this.currentDir : this.startDir;
+    const resolevedPath = path.resolve(currPath, enteredPath);
+
     try {
-      const currPath = this.currentDir ? this.currentDir : this.startDir;
-      const resolevedPath = path.resolve(currPath, enteredPath);
       await unlink(resolevedPath);
       mode && console.log(`${resolevedPath} removed`);
     } catch {
@@ -207,5 +209,66 @@ export class Utils extends OperatingSystem {
     }
 
     hash.end();
+  };
+
+  compress = async (pathFrom, pathTo) => {
+    const currDir = this.currentDir ? this.currentDir : this.startDir;
+    const fileName = path.resolve(pathFrom).split(sep).pop();
+    const pathToCompressFrom = path.resolve(currDir, pathFrom);
+    const pathToCompressTo = path.resolve(currDir, pathTo, fileName + '.br');
+
+    const rs = createReadStream(pathToCompressFrom);
+    const bs = zlib.createBrotliCompress();
+    const ws = createWriteStream(pathToCompressTo);
+
+    try {
+      await pipeline(rs, bs, ws);
+      console.log(`File compression successfully completed`);
+    } catch {
+      await this.rm(pathToCompressTo, false);
+    }
+
+    rs.on('error', (error) => {
+      console.log(`File read error: ${error}`);
+    });
+
+    bs.on('error', (error) => {
+      console.log(`Data compression error: ${error}`);
+    });
+
+    ws.on('error', (error) => {
+      console.log(`File writing error: ${error}`);
+    });
+  };
+
+  decompress = async (pathFrom, pathTo) => {
+    const currDir = this.currentDir ? this.currentDir : this.startDir;
+    const fileName = path.resolve(pathFrom).split(sep).pop().split('.');
+    fileName.pop();
+    const pathToDecompressFrom = path.resolve(currDir, pathFrom);
+    const pathToDecompressTo = path.resolve(currDir, pathTo, fileName.join('.'));
+
+    const rs = createReadStream(pathToDecompressFrom);
+    const bs = zlib.createBrotliDecompress();
+    const ws = createWriteStream(pathToDecompressTo);
+
+    try {
+      await pipeline(rs, bs, ws);
+      console.log(`File decompression successfully completed`);
+    } catch {
+      await this.rm(pathToDecompressTo, false);
+    }
+
+    rs.on('error', (error) => {
+      console.log(`File read error: ${error}`);
+    });
+
+    bs.on('error', (error) => {
+      console.log(`Data decompression error: ${error}`);
+    });
+
+    ws.on('error', (error) => {
+      console.log(`File writing error: ${error}`);
+    });
   };
 }

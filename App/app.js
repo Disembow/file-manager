@@ -65,11 +65,11 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'compress':
-          await this.compress(pathCommand);
+          await this.compress(pathCommand, secondPathCommand);
           await this.askCommand();
           break;
         case 'decompress':
-          await this.decompress(pathCommand);
+          await this.decompress(pathCommand, secondPathCommand);
           await this.askCommand();
           break;
         case '.exit':
