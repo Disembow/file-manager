@@ -13,7 +13,7 @@ export class AskCommand extends Utils {
     } else {
       this.currentDirMsg();
 
-      const fullCommand = await this.rl.question('');
+      const fullCommand = await this.rl.question('> ');
 
       const trimmedCommand = fullCommand.replace(/ +/g, ' ').trim();
       const [mainCommand, pathCommand, secondPathCommand] = trimmedCommand.split(' ');
