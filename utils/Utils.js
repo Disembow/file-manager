@@ -1,9 +1,10 @@
-import { createReadStream } from 'fs';
+import { createReadStream, createWriteStream } from 'fs';
 import { access, readdir, writeFile, rename, unlink } from 'fs/promises';
 import { EOL } from 'os';
 import path, { sep } from 'path';
 
 import { OperatingSystem } from './Os.js';
+import { pipeline } from 'stream/promises';
 
 export class Utils extends OperatingSystem {
   constructor() {
@@ -115,18 +116,50 @@ export class Utils extends OperatingSystem {
     }
   };
 
-  cp = async () => {};
+  cp = async (pathFrom, pathTo) => {
+    const currPath = this.currentDir ? this.currentDir : this.startDir;
+    const pathToCopyFrom = path.resolve(currPath, pathFrom);
+    const pathToCopyTo = path.resolve(currPath, pathTo);
+
+    const rs = createReadStream(pathToCopyFrom);
+    const ws = createWriteStream(pathToCopyTo);
+    let isWSOpen;
+    isWSOpen = true;
+
+    rs.on('error', () => {
+      console.log(`File ${pathFrom} does not exist`);
+      rs.close();
+      ws.close();
+      isWSOpen = false;
+    });
+
+    ws.on('error', () => {
+      isWSOpen &&
+        console.log(
+          `Specified path to file ${pathTo} does not exist or the operation is not permitted`
+        );
+      rs.close();
+      ws.close();
+    });
+
+    try {
+      await pipeline(rs, ws);
+      console.log(`Copying was successfully completed`);
+    } catch (error) {
+      await this.rm(pathToCopyTo, false);
+    }
+  };
 
   mv = async () => {};
 
-  rm = async (enteredPath) => {
+  rm = async (enteredPath, mode = true) => {
     try {
       const currPath = this.currentDir ? this.currentDir : this.startDir;
       const resolevedPath = path.resolve(currPath, enteredPath);
       await unlink(resolevedPath);
-      console.log(`${resolevedPath} removed`);
+      mode && console.log(`${resolevedPath} removed`);
     } catch {
-      console.log(`Can't find such file in ${resolevedPath}`);
+      mode && console.log(`Can't find such file in ${resolevedPath}`);
     }
   };
 

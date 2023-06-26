@@ -1,5 +1,3 @@
-import { EOL } from 'os';
-
 import { commands } from '../commands/commands.js';
 import { Utils } from '../utils/Utils.js';
 
@@ -47,7 +45,7 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'cp':
-          await this.cp();
+          await this.cp(pathCommand, secondPathCommand);
           await this.askCommand();
           break;
         case 'mv':
