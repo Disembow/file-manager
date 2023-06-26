@@ -28,12 +28,16 @@ export class Initial {
 
   welcomeMsg = () => {
     this.rl.write(`Welcome to the File Manager, ${this.userName}!${EOL}`);
-    this.rl.write(`You are currently in ${this.startDir}${EOL}`);
+    // this.rl.write(`You are currently in ${this.startDir}${EOL}`);
     this.isWelcomeMsg = !this.isWelcomeMsg;
   };
 
   farewellMsg = () => {
     console.log(`Thank you for using File Manager, ${this.userName}, goodbye!`);
     this.rl.close();
+  };
+
+  currentDirMsg = () => {
+    this.rl.write(`You are currently in ${this.currentDir}${EOL}`);
   };
 }

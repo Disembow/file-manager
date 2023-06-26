@@ -11,6 +11,8 @@ export class AskCommand extends Utils {
       this.welcomeMsg();
       await this.askCommand();
     } else {
+      this.currentDirMsg();
+
       const fullCommand = await this.rl.question('');
 
       const trimmedCommand = fullCommand.replace(/ +/g, ' ').trim();

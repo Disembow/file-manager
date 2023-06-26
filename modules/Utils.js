@@ -44,7 +44,10 @@ export class Utils extends Navigation {
 
       rs.on('data', (chunk) => console.log(chunk));
       rs.on('error', () => console.log(`Couldn't find such file as ${path}`));
-      rs.on('close', () => console.log(`Reading of ${pathCommand} finished`));
+      rs.on('close', () => {
+        console.log(`Reading of ${pathCommand} finished`);
+        console.log(`You are currently in ${this.currentDir}`);
+      });
     } catch (error) {
       this.rl.write(`Couldn't find such file as ${path}${EOL}`);
     }
@@ -116,7 +119,7 @@ export class Utils extends Navigation {
     const pathToNewDir = path.resolve(this.currentDir, pathTo, fileName);
 
     await this.cp(pathFrom, pathToNewDir);
-    await this.rm(pathFrom);
+    await this.rm(pathFrom, false);
   };
 
   rm = async (enteredPath, mode = true) => {

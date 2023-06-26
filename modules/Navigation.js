@@ -15,11 +15,10 @@ export class Navigation extends OperatingSystem {
     !this.currentDir ? (array = this.startDir.split(sep)) : (array = this.currentDir.split(sep));
 
     if (array.length === 1) {
-      this.rl.write(`You're currently in ${this.currentDir}${sep}${EOL}`);
+      return;
     } else {
       array.pop();
       this.currentDir = array.join(sep);
-      this.rl.write(`You're currently in ${this.currentDir}${sep}${EOL}`);
     }
   };
 
@@ -38,7 +37,7 @@ export class Navigation extends OperatingSystem {
       await access(targetDir);
 
       this.currentDir = targetDir;
-      this.rl.write(`You're currently in ${this.currentDir}${EOL}`);
+      // this.rl.write(`You're currently in ${this.currentDir}${EOL}`);
     } catch (error) {
       this.rl.write(`Specified path does not exist${EOL}`);
     }
