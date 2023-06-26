@@ -1,4 +1,4 @@
-import { AskCommand } from '../utils/AskCommand.js';
+import { AskCommand } from '../modules/AskCommand.js';
 
 class App extends AskCommand {
   constructor() {
