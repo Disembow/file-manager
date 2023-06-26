@@ -4,6 +4,7 @@ import { Utils } from '../utils/Utils.js';
 class App extends Utils {
   constructor() {
     super();
+    this.rl.on('SIGINT', this.farewellMsg);
   }
 
   askCommand = async () => {
@@ -12,6 +13,7 @@ class App extends Utils {
       await this.askCommand();
     } else {
       const fullCommand = await this.rl.question('');
+
       const trimmedCommand = fullCommand.replace(/ +/g, ' ').trim();
       const [mainCommand, pathCommand, secondPathCommand] = trimmedCommand.split(' ');
 

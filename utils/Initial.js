@@ -32,7 +32,7 @@ export class Initial {
   };
 
   farewellMsg = () => {
-    this.rl.write(`Thank you for using File Manager, ${this.userName}, goodbye!${EOL}`);
+    console.log(`Thank you for using File Manager, ${this.userName}, goodbye!`);
     this.rl.close();
   };
 }
