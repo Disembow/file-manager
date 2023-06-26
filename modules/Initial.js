@@ -8,7 +8,7 @@ export class Initial {
     this.userName = this.getUserName();
     this.isWelcomeMsg = true;
     this.startDir = homedir();
-    this.currentDir = null;
+    this.currentDir = this.startDir;
     this.errorMessage = `Operation failed, use command --help to see list of commands${EOL}`;
 
     this.rl = readline.createInterface({

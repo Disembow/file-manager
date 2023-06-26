@@ -15,8 +15,7 @@ export class Utils extends Navigation {
 
   ls = async () => {
     try {
-      const dir = this.currentDir ? this.currentDir : this.startDir;
-      const list = await readdir(dir, { withFileTypes: true });
+      const list = await readdir(this.currentDir, { withFileTypes: true });
 
       const result = list
         .map((file) => {
@@ -40,22 +39,19 @@ export class Utils extends Navigation {
 
   cat = async (pathCommand) => {
     try {
-      const currPath = this.currentDir ? this.currentDir : this.startDir;
-      const pathToFile = path.resolve(currPath, pathCommand);
+      const pathToFile = path.resolve(this.currentDir, pathCommand);
       const rs = createReadStream(pathToFile, { encoding: 'utf8' });
 
-      rs.on('open', () => console.log());
       rs.on('data', (chunk) => console.log(chunk));
       rs.on('error', () => console.log(`Couldn't find such file as ${path}`));
-      rs.on('close', () => console.log(`Reading of ${pathCommand} finished${EOL}`));
+      rs.on('close', () => console.log(`Reading of ${pathCommand} finished`));
     } catch (error) {
       this.rl.write(`Couldn't find such file as ${path}${EOL}`);
     }
   };
 
   add = async (fileName) => {
-    const currPath = this.currentDir ? this.currentDir : this.startDir;
-    const pathToFile = path.resolve(currPath, fileName);
+    const pathToFile = path.resolve(this.currentDir, fileName);
 
     try {
       await writeFile(pathToFile, '');
@@ -70,9 +66,8 @@ export class Utils extends Navigation {
       return console.log('Wrong command, it needs 2 arguments');
     }
 
-    const currPath = this.currentDir ? this.currentDir : this.startDir;
-    const pathToFile = path.resolve(currPath, originalFileName);
-    const pathToRenamedFile = path.resolve(currPath, newFileName);
+    const pathToFile = path.resolve(this.currentDir, originalFileName);
+    const pathToRenamedFile = path.resolve(this.currentDir, newFileName);
 
     try {
       await access(pathToFile);
@@ -84,9 +79,8 @@ export class Utils extends Navigation {
   };
 
   cp = async (pathFrom, pathTo) => {
-    const currPath = this.currentDir ? this.currentDir : this.startDir;
-    const pathToCopyFrom = path.resolve(currPath, pathFrom);
-    const pathToCopyTo = path.resolve(currPath, pathTo);
+    const pathToCopyFrom = path.resolve(this.currentDir, pathFrom);
+    const pathToCopyTo = path.resolve(this.currentDir, pathTo);
 
     const rs = createReadStream(pathToCopyFrom);
     const ws = createWriteStream(pathToCopyTo);
@@ -119,16 +113,14 @@ export class Utils extends Navigation {
 
   mv = async (pathFrom, pathTo) => {
     const fileName = path.resolve(pathFrom).split(sep).pop();
-    const currPath = this.currentDir ? this.currentDir : this.startDir;
-    const pathToNewDir = path.resolve(currPath, pathTo, fileName);
+    const pathToNewDir = path.resolve(this.currentDir, pathTo, fileName);
 
     await this.cp(pathFrom, pathToNewDir);
     await this.rm(pathFrom);
   };
 
   rm = async (enteredPath, mode = true) => {
-    const currPath = this.currentDir ? this.currentDir : this.startDir;
-    const resolevedPath = path.resolve(currPath, enteredPath);
+    const resolevedPath = path.resolve(this.currentDir, enteredPath);
 
     try {
       await unlink(resolevedPath);
@@ -163,7 +155,7 @@ export class Utils extends Navigation {
 
   hash = async (pathTo) => {
     const hash = createHash('sha256');
-    const pathToFile = path.resolve(this.currentDir ? this.currentDir : this.startDir, pathTo);
+    const pathToFile = path.resolve(this.currentDir, pathTo);
 
     try {
       const result = await readFile(pathToFile, 'utf-8');
@@ -177,10 +169,9 @@ export class Utils extends Navigation {
   };
 
   compress = async (pathFrom, pathTo) => {
-    const currDir = this.currentDir ? this.currentDir : this.startDir;
     const fileName = path.resolve(pathFrom).split(sep).pop();
-    const pathToCompressFrom = path.resolve(currDir, pathFrom);
-    const pathToCompressTo = path.resolve(currDir, pathTo, fileName + '.br');
+    const pathToCompressFrom = path.resolve(this.currentDir, pathFrom);
+    const pathToCompressTo = path.resolve(this.currentDir, pathTo, fileName + '.br');
 
     const rs = createReadStream(pathToCompressFrom);
     const bs = zlib.createBrotliCompress();
@@ -207,11 +198,10 @@ export class Utils extends Navigation {
   };
 
   decompress = async (pathFrom, pathTo) => {
-    const currDir = this.currentDir ? this.currentDir : this.startDir;
     const fileName = path.resolve(pathFrom).split(sep).pop().split('.');
     fileName.pop();
-    const pathToDecompressFrom = path.resolve(currDir, pathFrom);
-    const pathToDecompressTo = path.resolve(currDir, pathTo, fileName.join('.'));
+    const pathToDecompressFrom = path.resolve(this.currentDir, pathFrom);
+    const pathToDecompressTo = path.resolve(this.currentDir, pathTo, fileName.join('.'));
 
     const rs = createReadStream(pathToDecompressFrom);
     const bs = zlib.createBrotliDecompress();

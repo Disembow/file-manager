@@ -10,16 +10,16 @@ export class OperatingSystem extends Initial {
   os_eol = async () => {
     switch (os.platform()) {
       case 'win32':
-        this.rl.write('\\n' + os.EOL);
+        this.rl.write('\\n' + EOL);
         break;
       case 'linux':
-        this.rl.write('\\r\\n' + os.EOL);
+        this.rl.write('\\r\\n' + EOL);
         break;
       case 'darwin':
-        this.rl.write('\\r\\n' + os.EOL);
+        this.rl.write('\\r\\n' + EOL);
         break;
       default:
-        this.rl.write('\\r\\n' + os.EOL);
+        this.rl.write('\\r\\n' + EOL);
         break;
     }
   };
