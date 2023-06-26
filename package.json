@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "start:name": "node index.js -- --username=Jack",
-    "help": "node index.js -- --help"
+    "start:name": "node index.js -- --username=Jack"
   },
   "repository": {
     "type": "git",
