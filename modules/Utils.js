@@ -117,7 +117,7 @@ export class Utils extends Navigation {
     try {
       await pipeline(rs, ws);
       console.log(`Copying was successfully completed`);
-    } catch (error) {
+    } catch {
       await this.rm(pathToCopyTo, false);
     }
   };
