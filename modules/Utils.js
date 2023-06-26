@@ -68,18 +68,18 @@ export class Utils extends Navigation {
     }
   };
 
-  rn = async (originalPath, newFileName) => {
-    if (!originalPath || !newFileName) return this.checkArgs();
+  rn = async (pathTo, newFileName) => {
+    if (!pathTo || !newFileName) return this.checkArgs();
 
-    const pathToFile = path.resolve(this.currentDir, originalPath);
+    const pathToFile = path.resolve(this.currentDir, pathTo);
     const fileDir = path.dirname(pathToFile);
     const pathToRenamedFile = path.resolve(fileDir, newFileName);
 
     try {
       await rename(pathToFile, pathToRenamedFile);
-      console.log(`${originalPath} renamed into ${newFileName}`);
+      console.log(`${pathTo} renamed into ${newFileName}`);
     } catch (error) {
-      console.log(`Couldn't find such file as ${originalPath}`);
+      console.log(`Couldn't find such file as ${pathTo}`);
     }
   };
 
@@ -132,10 +132,10 @@ export class Utils extends Navigation {
     await this.rm(pathFrom, false);
   };
 
-  rm = async (enteredPath, mode = true) => {
-    if (!enteredPath) return this.checkArgs(1);
+  rm = async (pathTo, mode = true) => {
+    if (!pathTo) return this.checkArgs(1);
 
-    const resolevedPath = path.resolve(this.currentDir, enteredPath);
+    const resolevedPath = path.resolve(this.currentDir, pathTo);
 
     try {
       await unlink(resolevedPath);
