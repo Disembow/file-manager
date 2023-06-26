@@ -49,7 +49,7 @@ class App extends Utils {
           await this.askCommand();
           break;
         case 'mv':
-          await this.mv();
+          await this.mv(pathCommand, secondPathCommand);
           await this.askCommand();
           break;
         case 'rm':

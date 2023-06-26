@@ -150,7 +150,14 @@ export class Utils extends OperatingSystem {
     }
   };
 
-  mv = async () => {};
+  mv = async (pathFrom, pathTo) => {
+    const fileName = path.resolve(pathFrom).split(sep).pop();
+    const currPath = this.currentDir ? this.currentDir : this.startDir;
+    const pathToNewDir = path.resolve(currPath, pathTo, fileName);
+
+    await this.cp(pathFrom, pathToNewDir);
+    await this.rm(pathFrom);
+  };
 
   rm = async (enteredPath, mode = true) => {
     try {
