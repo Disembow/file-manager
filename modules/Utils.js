@@ -83,7 +83,15 @@ export class Utils extends Navigation {
 
   cp = async (pathFrom, pathTo) => {
     const pathToCopyFrom = path.resolve(this.currentDir, pathFrom);
-    const pathToCopyTo = path.resolve(this.currentDir, pathTo);
+    const orinalFileName = pathToCopyFrom.split(sep).pop();
+    let pathToCopyTo = path.resolve(this.currentDir, pathTo, orinalFileName);
+    let fileName;
+
+    if (pathToCopyFrom === pathToCopyTo) {
+      let [name, ext] = orinalFileName.split('.');
+      fileName = `${name}-copy.${ext}`;
+      pathToCopyTo = path.resolve(this.currentDir, pathTo, fileName);
+    }
 
     const rs = createReadStream(pathToCopyFrom);
     const ws = createWriteStream(pathToCopyTo);
