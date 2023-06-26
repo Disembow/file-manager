@@ -31,7 +31,7 @@ export class OperatingSystem extends Initial {
     this.rl.write(`Cores quantity: ${coresQty}${EOL}`);
     cpus.forEach((e, i) => {
       this.rl.write(
-        `CPU #${i.toString().padStart(2, '0')}: model - ${e.model
+        `CPU #${(i + 1).toString().padStart(2, '0')}: model - ${e.model
           .split('@')[0]
           .trim()}, clock rate - ${(Number(e.speed) / 1000).toFixed(2)}GHz${
           i === coresQty - 1 ? `.` : `,`
